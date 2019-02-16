@@ -1,0 +1,69 @@
+.card-container {
+  margin-bottom:10px;
+  border-radius:3px;
+  background:white;
+  box-shadow:#cbccc9 1px 1px 1px;
+}
+body {
+  background:#e1e2df;
+}
+
+.modal {
+  background:black;
+  background-color: rgba(0,0,0,.7);
+}
+
+/* Important part */
+.modal-dialog{
+  overflow-y: initial !important
+}
+.modal-body{
+  height: 500px;
+  overflow-y: auto;
+  background:#ffcc00;
+}
+
+.modal-body .card-container {
+background:white;
+height:120px!important;
+}
+
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #e4be42; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  margin-top:100px;
+  display:block;
+  margin:200px auto;
+  z-index:900000000000002323232323!important;
+  background:black;
+  background: rgba(10, 10, 10, 0.1);
+}
+@keyframes spin {
+   0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+#container-loader {
+  background:black;
+  height:100%;
+  width:100%;
+  position:absolute;
+  background: rgba(10, 10, 10, 0.5);
+  z-index:10000;
+}
+.loading-modal {
+  text-align:center;
+}
+
+.jumbotron {
+  background-image:linear-gradient(to right, #7c4297, #dc2430);
+  color:white;
+}
+
+.jumbotron .text-muted {
+  color:white!important;
+  opacity:060;
+}

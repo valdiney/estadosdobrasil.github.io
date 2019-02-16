@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Consulta API IBGE</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/style.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <link rel="shortcut icon" href="https://avatars0.githubusercontent.com/u/3947490?v=3&u=ad7d473034d7f9ced288b13b1755a9df442eee8d" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Valdney França">
+
+    <meta property="og:url" content="https://valdiney.github.io/estadosbrasil.github.io/">
+    <meta property="og:title" content="Consulta Estados e Municícios do Brasil.">
+    <meta property="og:site_name" content="Robotec">
+    <meta property="og:description" content="Consulta na API do IBGE Estados e Municícios do Brasil">
+    <meta property="og:image" content="https://avatars0.githubusercontent.com/u/3947490?v=3&u=ad7d473034d7f9ced288b13b1755a9df442eee8d&s=400">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="800">
+    <meta property="og:image:height" content="600">
+    <meta property="og:type" content="website">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#2c3e50">
+
+</head>
+<body>
+   <div id="app">
+   	
+		<div v-if="loading" id="container-loader">
+	        <div class="loader"></div>
+	    </div>
+
+		<section class="jumbotron text-center">
+	      <div class="container">
+	        <h1 class="jumbotron-heading">Estados e Municípios do Brasil</h1>
+	        <p class="lead text-muted"><small>Origem dos dados: API do IBGE</small></p>
+	       
+	      </div>
+	    </section>
+
+		<div class="container-fluid">
+
+			<div class="modal fade show" id="myModal" v-bind:style="modalMunicipios">
+			  <div class="modal-dialog modal-lg">
+			    <div class="modal-content">
+
+			      <!-- Modal Header -->
+			      <div class="modal-header">
+			        <h4 class="modal-title">Municípios do estado do {{modalNomeEstado}}</h4>
+			        <button type="button" class="close" data-dismiss="modal" @click="fecharModal()">&times;</button>
+			      </div>
+
+			      <!-- Modal body -->
+			      <div class="modal-body">
+
+			      	<h2 v-if="loadingModal" class="loading-modal">Carregando...</h2>
+
+			      	<div class="row" style="padding:1px">
+						<div class="col-sm-4" v-for="municipio in municipios">
+						    <div class="card-container">
+							  	<div class="card-body">
+								    <h6 class="card-title">{{municipio.nome}}</h6>
+								    <p class="card-subtitle mb-2 text-muted"><span>Mesorregiao: </span>
+								        {{municipio.microrregiao.mesorregiao.nome}}
+								    </p>
+								 </div>
+						    </div>
+						</div>
+				    </div>
+			        
+			      </div><!--end modal body-->
+
+			    </div>
+			  </div>
+			</div>
+
+	        <div class="album text-muted">
+
+				<div class="row" style="padding:1px" v-if="seEstados">
+					<div class="col-sm-4" v-for="estado in estados">
+					    <div class="card-container">
+						  	<div class="card-body">
+							    <h5 class="card-title">{{estado.nome}}</h5>
+							    <h6 class="card-subtitle mb-2 text-muted"><span>Sigla: {{estado.sigla}}</span></h6>
+							    <h6 class="card-subtitle mb-2 text-muted"><span>Região: {{estado.regiao.nome}}</span></h6>
+					            <hr>
+							    <button type="button" class="btn btn-sm btn-success" 
+							     @click="chamarMunicipios(estado.id, estado.nome)">
+							    	<i class="fas fa-map-marker-alt"></i> Municípios
+							    </button>
+							 </div>
+					    </div>
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>
+
+    </div><!--END APP-->
+		
+<script src="js/vue.js"></script>
+<script src="js/axios.js"></script>
+
+<script>
+	new Vue({
+		el: "#app",
+
+		data() {
+			return {
+                
+                // Dados
+				municipios: "",
+				estados: "",
+
+				// Status Containers
+				seMunicipios: false,
+				seEstados: true,
+
+				modalMunicipios: "display:none",
+				modalNomeEstado: "",
+
+				loading: false,
+				loadingModal: false
+
+			}
+		},
+
+		created: function() {
+			this.consultaEstados();
+		},
+
+		methods: {
+
+			consultaEstados: function() {
+				this.loading = true;
+				var rota = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/";
+				axios(rota).then(response => {
+					this.estados = response.data;
+				});
+
+				this.loading = false;
+			},
+
+			consultaMunicipios: function(idEstado) {
+				this.loadingModal = true;
+				var rota = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/"+idEstado+"/municipios";
+				axios(rota).then(response => {
+					this.municipios = response.data;
+				});
+
+				this.loadingModal = false;
+			},
+
+			chamarMunicipios: function(idEstado, nomeEstado) {
+				this.consultaMunicipios(idEstado);
+				this.modalMunicipios = "display:block";
+				this.modalNomeEstado = nomeEstado;
+			},
+
+			fecharModal: function() {
+				this.modalMunicipios = "display:none";
+			}
+
+		}
+
+	});
+	
+
+	//API https://servicodados.ibge.gov.br/api/docs/localidades?versao=1#api-Municipios-estadosUFMunicipiosGet
+</script>
+
+</body>
+</html>
