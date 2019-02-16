@@ -1,13 +1,15 @@
+body {
+  background:#e1e2df;
+}
 .card-container {
   margin-bottom:10px;
   border-radius:3px;
   background:white;
   box-shadow:#cbccc9 1px 1px 1px;
 }
-body {
-  background:#e1e2df;
+.card-container:hover {
+  box-shadow:#cbccc9 5px 5px 5px;
 }
-
 .modal {
   background:black;
   background-color: rgba(0,0,0,.7);
@@ -20,12 +22,12 @@ body {
 .modal-body{
   height: 500px;
   overflow-y: auto;
-  background:#ffcc00;
+  background:#e1e2df;
 }
 
 .modal-body .card-container {
-background:white;
-height:120px!important;
+  background:white;
+  height:120px!important;
 }
 
 .loader {
@@ -66,4 +68,9 @@ height:120px!important;
 .jumbotron .text-muted {
   color:white!important;
   opacity:060;
+}
+.btn-success {
+  background-image:linear-gradient(to right, #7c4297, #dc2430)!important;
+  border:1px solid transparent!important;
+  box-shadow:black 0px 0px 0px;
 }

@@ -37,6 +37,7 @@
 	      <div class="container">
 	        <h1 class="jumbotron-heading">Estados e Municípios do Brasil</h1>
 	        <p class="lead text-muted"><small>Origem dos dados: API do IBGE</small></p>
+	        <small>O Brasil possui {{quantidaDeEstadosDaFederacao}} estados</small>
 	       
 	      </div>
 	    </section>
@@ -81,6 +82,7 @@
 
 				<div class="row" style="padding:1px" v-if="seEstados">
 					<div class="col-sm-4" v-for="estado in estados">
+						
 					    <div class="card-container">
 						  	<div class="card-body">
 							    <h5 class="card-title">{{estado.nome}}</h5>
@@ -93,6 +95,7 @@
 							    </button>
 							 </div>
 					    </div>
+					    
 					</div>
 				</div>
 
@@ -116,6 +119,8 @@
                 // Dados
 				municipios: "",
 				estados: "",
+				quantidaDeEstadosDaFederacao: 0,
+				projecaoPopulacional: "",
 
 				// Status Containers
 				seMunicipios: false,
@@ -141,6 +146,7 @@
 				var rota = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/";
 				axios(rota).then(response => {
 					this.estados = response.data;
+					this.quantidaDeEstadosDaFederacao = this.estados.length - 1;
 				});
 
 				this.loading = false;
@@ -165,7 +171,6 @@
 			fecharModal: function() {
 				this.modalMunicipios = "display:none";
 			}
-
 		}
 
 	});
